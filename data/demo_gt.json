@@ -1,0 +1,134 @@
+{
+  "wall_height": 2.7,
+  "walls": [
+    {
+      "id": "a",
+      "p1": [
+        0,
+        0
+      ],
+      "p2": [
+        6,
+        0
+      ],
+      "source": "detected"
+    },
+    {
+      "id": "b",
+      "p1": [
+        6,
+        0
+      ],
+      "p2": [
+        6,
+        2
+      ],
+      "source": "detected"
+    },
+    {
+      "id": "c",
+      "p1": [
+        6,
+        2
+      ],
+      "p2": [
+        3,
+        2
+      ],
+      "source": "detected"
+    },
+    {
+      "id": "d",
+      "p1": [
+        3,
+        2
+      ],
+      "p2": [
+        3,
+        5
+      ],
+      "source": "detected"
+    },
+    {
+      "id": "e",
+      "p1": [
+        3,
+        5
+      ],
+      "p2": [
+        0,
+        5
+      ],
+      "source": "detected"
+    },
+    {
+      "id": "f",
+      "p1": [
+        0,
+        5
+      ],
+      "p2": [
+        0,
+        0
+      ],
+      "source": "detected"
+    }
+  ],
+  "doors": [
+    {
+      "wall": "a",
+      "pos": 1.5,
+      "width": 0.9,
+      "source": "detected"
+    }
+  ],
+  "windows": [
+    {
+      "wall": "e",
+      "pos": 1.5,
+      "width": 1.2,
+      "sill": 0.9,
+      "height": 1.2,
+      "source": "detected"
+    },
+    {
+      "wall": "b",
+      "pos": 1.0,
+      "width": 1.0,
+      "sill": 0.9,
+      "height": 1.2,
+      "source": "detected"
+    }
+  ],
+  "rooms": [
+    {
+      "name": "flat",
+      "polygon": [
+        [
+          0,
+          0
+        ],
+        [
+          6,
+          0
+        ],
+        [
+          6,
+          2
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          0,
+          5
+        ]
+      ]
+    }
+  ]
+}
