@@ -9,8 +9,10 @@
   "doors": [
     {"wall": "w1", "pos": 1.5, "width": 0.9, "source": "detected"}
   ],
-  "windows": [],
+  "windows": [
+    {"wall": "w3", "pos": 2.5, "width": 1.5, "sill": 0.9, "height": 1.2, "source": "detected"}
+  ],
   "rooms": [
-    {"name": "Living", "polygon": [[0,0],[5,0],[5,4],[0,4]]}
+    {"name": "Living", "polygon": [[0, 0], [5, 0], [5, 4], [0, 4]]}
   ]
 }
