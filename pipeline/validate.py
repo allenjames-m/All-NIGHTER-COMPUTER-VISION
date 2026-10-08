@@ -21,6 +21,7 @@ import sys
 from pathlib import Path
 
 import numpy as np
+import shapely
 from shapely.geometry import LineString, Point, Polygon
 from shapely.ops import polygonize, unary_union
 
@@ -41,6 +42,8 @@ def _dist_pt_seg(pt, a, b):
 
 def _faces(plan):
     lines = unary_union([LineString([w["p1"], w["p2"]]) for w in plan["walls"] if _L(w) > 1e-6])
+    # snap corners to a 5 mm grid so wall ends that meet "almost exactly" really connect
+    lines = shapely.set_precision(lines, 0.005)
     return [f for f in polygonize(lines) if f.area > 0.5]
 
 
