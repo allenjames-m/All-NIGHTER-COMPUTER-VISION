@@ -1,0 +1,1009 @@
+{
+ "wall_height": 2.7,
+ "walls": [
+  {
+   "id": "w1",
+   "p1": [
+    9.059,
+    10.571
+   ],
+   "p2": [
+    9.059,
+    1.697
+   ],
+   "thickness": 0.44,
+   "source": "detected",
+   "external": true
+  },
+  {
+   "id": "w2",
+   "p1": [
+    2.363,
+    10.486
+   ],
+   "p2": [
+    9.279,
+    10.486
+   ],
+   "thickness": 0.17,
+   "source": "detected",
+   "external": true
+  },
+  {
+   "id": "w3",
+   "p1": [
+    0.91,
+    10.636
+   ],
+   "p2": [
+    2.363,
+    10.636
+   ],
+   "thickness": 0.47,
+   "source": "detected",
+   "external": true
+  },
+  {
+   "id": "w4",
+   "p1": [
+    1.19,
+    6.9
+   ],
+   "p2": [
+    1.19,
+    10.871
+   ],
+   "thickness": 0.56,
+   "source": "detected",
+   "external": true
+  },
+  {
+   "id": "w5",
+   "p1": [
+    1.228,
+    7.01
+   ],
+   "p2": [
+    1.228,
+    4.478
+   ],
+   "thickness": 0.636,
+   "source": "detected",
+   "external": true
+  },
+  {
+   "id": "w6",
+   "p1": [
+    0.91,
+    1.997
+   ],
+   "p2": [
+    9.279,
+    1.997
+   ],
+   "thickness": 0.6,
+   "source": "detected",
+   "external": true
+  },
+  {
+   "id": "w7",
+   "p1": [
+    1.2,
+    4.478
+   ],
+   "p2": [
+    1.2,
+    1.697
+   ],
+   "thickness": 0.58,
+   "source": "detected",
+   "external": true
+  },
+  {
+   "id": "w8",
+   "p1": [
+    0.91,
+    4.558
+   ],
+   "p2": [
+    3.868,
+    4.558
+   ],
+   "thickness": 0.16,
+   "source": "detected",
+   "external": false
+  },
+  {
+   "id": "w9",
+   "p1": [
+    3.788,
+    4.638
+   ],
+   "p2": [
+    3.788,
+    2.297
+   ],
+   "thickness": 0.16,
+   "source": "detected",
+   "external": false
+  },
+  {
+   "id": "w10",
+   "p1": [
+    3.813,
+    4.478
+   ],
+   "p2": [
+    3.813,
+    5.75
+   ],
+   "thickness": 0.11,
+   "source": "detected",
+   "external": false
+  },
+  {
+   "id": "w11",
+   "p1": [
+    3.952,
+    5.75
+   ],
+   "p2": [
+    3.952,
+    7.499
+   ],
+   "thickness": 0.386,
+   "source": "detected",
+   "external": false
+  },
+  {
+   "id": "w12",
+   "p1": [
+    3.66,
+    7.466
+   ],
+   "p2": [
+    4.081,
+    7.649
+   ],
+   "thickness": 0.277,
+   "source": "detected",
+   "external": false
+  },
+  {
+   "id": "w13",
+   "p1": [
+    3.717,
+    7.335
+   ],
+   "p2": [
+    4.14,
+    7.51
+   ],
+   "thickness": 0.023,
+   "source": "detected",
+   "external": false
+  },
+  {
+   "id": "w14",
+   "p1": [
+    4.145,
+    7.386
+   ],
+   "p2": [
+    7.28,
+    7.386
+   ],
+   "thickness": 0.11,
+   "source": "detected",
+   "external": false
+  },
+  {
+   "id": "w15",
+   "p1": [
+    7.28,
+    7.284
+   ],
+   "p2": [
+    7.614,
+    7.284
+   ],
+   "thickness": 0.315,
+   "source": "detected",
+   "external": false
+  },
+  {
+   "id": "w16",
+   "p1": [
+    7.614,
+    7.386
+   ],
+   "p2": [
+    8.839,
+    7.386
+   ],
+   "thickness": 0.11,
+   "source": "detected",
+   "external": false
+  },
+  {
+   "id": "w17",
+   "p1": [
+    7.464,
+    7.127
+   ],
+   "p2": [
+    7.464,
+    5.329
+   ],
+   "thickness": 0.11,
+   "source": "detected",
+   "external": false
+  },
+  {
+   "id": "w18",
+   "p1": [
+    7.409,
+    5.384
+   ],
+   "p2": [
+    8.839,
+    5.384
+   ],
+   "thickness": 0.11,
+   "source": "detected",
+   "external": false
+  },
+  {
+   "id": "w19",
+   "p1": [
+    3.758,
+    6.955
+   ],
+   "p2": [
+    0.91,
+    6.955
+   ],
+   "thickness": 0.11,
+   "source": "detected",
+   "external": false
+  },
+  {
+   "id": "w20",
+   "p1": [
+    3.77,
+    7.641
+   ],
+   "p2": [
+    3.77,
+    10.401
+   ],
+   "thickness": 0.11,
+   "source": "detected",
+   "external": false
+  },
+  {
+   "id": "w21",
+   "p1": [
+    3.715,
+    8.696
+   ],
+   "p2": [
+    1.47,
+    8.696
+   ],
+   "thickness": 0.11,
+   "source": "detected",
+   "external": false
+  },
+  {
+   "id": "w22",
+   "p1": [
+    16.118,
+    1.973
+   ],
+   "p2": [
+    9.762,
+    1.973
+   ],
+   "thickness": 0.39,
+   "source": "detected",
+   "external": true
+  },
+  {
+   "id": "w23",
+   "p1": [
+    16.008,
+    7.272
+   ],
+   "p2": [
+    16.008,
+    1.778
+   ],
+   "thickness": 0.22,
+   "source": "detected",
+   "external": true
+  },
+  {
+   "id": "w24",
+   "p1": [
+    15.753,
+    7.266
+   ],
+   "p2": [
+    16.211,
+    7.54
+   ],
+   "thickness": 0.364,
+   "source": "detected",
+   "external": true
+  },
+  {
+   "id": "w25",
+   "p1": [
+    14.311,
+    7.586
+   ],
+   "p2": [
+    16.118,
+    7.586
+   ],
+   "thickness": 0.22,
+   "source": "detected",
+   "external": true
+  },
+  {
+   "id": "w26",
+   "p1": [
+    14.431,
+    7.476
+   ],
+   "p2": [
+    14.431,
+    10.572
+   ],
+   "thickness": 0.24,
+   "source": "detected",
+   "external": true
+  },
+  {
+   "id": "w27",
+   "p1": [
+    10.884,
+    10.472
+   ],
+   "p2": [
+    14.551,
+    10.472
+   ],
+   "thickness": 0.2,
+   "source": "detected",
+   "external": true
+  },
+  {
+   "id": "w28",
+   "p1": [
+    9.762,
+    10.557
+   ],
+   "p2": [
+    10.884,
+    10.557
+   ],
+   "thickness": 0.37,
+   "source": "detected",
+   "external": true
+  },
+  {
+   "id": "w29",
+   "p1": [
+    15.898,
+    4.477
+   ],
+   "p2": [
+    14.458,
+    4.477
+   ],
+   "thickness": 0.1,
+   "source": "detected",
+   "external": false
+  },
+  {
+   "id": "w30",
+   "p1": [
+    14.503,
+    2.168
+   ],
+   "p2": [
+    14.503,
+    4.527
+   ],
+   "thickness": 0.09,
+   "source": "detected",
+   "external": false
+  },
+  {
+   "id": "w31",
+   "p1": [
+    14.458,
+    2.825
+   ],
+   "p2": [
+    12.549,
+    2.825
+   ],
+   "thickness": 0.11,
+   "source": "detected",
+   "external": false
+  },
+  {
+   "id": "w32",
+   "p1": [
+    12.604,
+    2.168
+   ],
+   "p2": [
+    12.604,
+    2.88
+   ],
+   "thickness": 0.11,
+   "source": "detected",
+   "external": false
+  },
+  {
+   "id": "w33",
+   "p1": [
+    13.226,
+    2.88
+   ],
+   "p2": [
+    13.226,
+    3.938
+   ],
+   "thickness": 0.11,
+   "source": "detected",
+   "external": false
+  },
+  {
+   "id": "w34",
+   "p1": [
+    14.311,
+    7.531
+   ],
+   "p2": [
+    10.133,
+    7.531
+   ],
+   "thickness": 0.11,
+   "source": "detected",
+   "external": false
+  },
+  {
+   "id": "w35",
+   "p1": [
+    9.947,
+    4.992
+   ],
+   "p2": [
+    9.947,
+    10.742
+   ],
+   "thickness": 0.37,
+   "source": "detected",
+   "external": true
+  },
+  {
+   "id": "w36",
+   "p1": [
+    9.911,
+    1.778
+   ],
+   "p2": [
+    9.911,
+    4.992
+   ],
+   "thickness": 0.297,
+   "source": "detected",
+   "external": true
+  },
+  {
+   "id": "w37",
+   "p1": [
+    9.734,
+    1.778
+   ],
+   "p2": [
+    9.734,
+    2.17
+   ],
+   "thickness": 0.057,
+   "source": "detected",
+   "external": false
+  }
+ ],
+ "doors": [
+  {
+   "wall": "w2",
+   "pos": 5.575,
+   "width": 0.832,
+   "source": "detected"
+  },
+  {
+   "wall": "w8",
+   "pos": 2.315,
+   "width": 0.818,
+   "source": "detected"
+  },
+  {
+   "wall": "w10",
+   "pos": 0.833,
+   "width": 0.796,
+   "source": "detected"
+  },
+  {
+   "wall": "w14",
+   "pos": 0.831,
+   "width": 0.83,
+   "source": "detected"
+  },
+  {
+   "wall": "w18",
+   "pos": 0.459,
+   "width": 0.596,
+   "source": "detected"
+  },
+  {
+   "wall": "w20",
+   "pos": 1.937,
+   "width": 0.621,
+   "source": "detected"
+  },
+  {
+   "wall": "w20",
+   "pos": 0.33,
+   "width": 0.607,
+   "source": "detected"
+  },
+  {
+   "wall": "w22",
+   "pos": 2.158,
+   "width": 0.898,
+   "source": "detected"
+  },
+  {
+   "wall": "w30",
+   "pos": 1.188,
+   "width": 0.812,
+   "source": "detected"
+  },
+  {
+   "wall": "w31",
+   "pos": 0.502,
+   "width": 0.903,
+   "source": "detected"
+  },
+  {
+   "wall": "w34",
+   "pos": 1.087,
+   "width": 0.792,
+   "source": "detected"
+  }
+ ],
+ "windows": [
+  {
+   "wall": "w9",
+   "pos": 0.842,
+   "width": 1.23,
+   "source": "detected"
+  },
+  {
+   "wall": "w22",
+   "pos": 0.524,
+   "width": 0.521,
+   "source": "detected"
+  },
+  {
+   "wall": "w35",
+   "pos": 1.696,
+   "width": 1.509,
+   "source": "detected"
+  },
+  {
+   "wall": "w35",
+   "pos": 4.02,
+   "width": 1.53,
+   "source": "detected"
+  },
+  {
+   "wall": "w36",
+   "pos": 2.145,
+   "width": 2.116,
+   "source": "detected"
+  }
+ ],
+ "rooms": [
+  {
+   "name": "VH",
+   "type": "Closet WalkIn",
+   "polygon": [
+    [
+     1.47,
+     8.751
+    ],
+    [
+     3.715,
+     8.751
+    ],
+    [
+     3.715,
+     10.401
+    ],
+    [
+     1.47,
+     10.401
+    ]
+   ]
+  },
+  {
+   "name": "VH",
+   "type": "Closet WalkIn",
+   "polygon": [
+    [
+     3.715,
+     7.339
+    ],
+    [
+     3.715,
+     8.641
+    ],
+    [
+     1.47,
+     8.641
+    ],
+    [
+     1.47,
+     7.01
+    ],
+    [
+     3.758,
+     7.01
+    ],
+    [
+     3.758,
+     7.339
+    ]
+   ]
+  },
+  {
+   "name": "VARASTO",
+   "type": "Storage",
+   "polygon": [
+    [
+     8.839,
+     7.441
+    ],
+    [
+     8.839,
+     10.401
+    ],
+    [
+     3.825,
+     10.401
+    ],
+    [
+     3.825,
+     7.641
+    ],
+    [
+     4.084,
+     7.641
+    ],
+    [
+     4.084,
+     7.499
+    ],
+    [
+     4.145,
+     7.499
+    ],
+    [
+     4.145,
+     7.441
+    ]
+   ]
+  },
+  {
+   "name": "WC",
+   "type": "Bath",
+   "polygon": [
+    [
+     8.839,
+     7.331
+    ],
+    [
+     7.614,
+     7.331
+    ],
+    [
+     7.614,
+     7.127
+    ],
+    [
+     7.519,
+     7.127
+    ],
+    [
+     7.519,
+     5.439
+    ],
+    [
+     8.839,
+     5.439
+    ]
+   ]
+  },
+  {
+   "name": "SAUNATUPA",
+   "type": "Sauna",
+   "polygon": [
+    [
+     7.28,
+     7.127
+    ],
+    [
+     7.28,
+     7.331
+    ],
+    [
+     4.145,
+     7.331
+    ],
+    [
+     4.145,
+     5.75
+    ],
+    [
+     3.868,
+     5.75
+    ],
+    [
+     3.868,
+     2.297
+    ],
+    [
+     8.839,
+     2.297
+    ],
+    [
+     8.839,
+     5.329
+    ],
+    [
+     7.409,
+     5.329
+    ],
+    [
+     7.409,
+     7.127
+    ]
+   ]
+  },
+  {
+   "name": "PESUH",
+   "type": "Bath Shower",
+   "polygon": [
+    [
+     3.758,
+     4.638
+    ],
+    [
+     3.758,
+     6.9
+    ],
+    [
+     1.546,
+     6.9
+    ],
+    [
+     1.546,
+     4.638
+    ]
+   ]
+  },
+  {
+   "name": "UNDEFINED",
+   "type": "Undefined",
+   "polygon": [
+    [
+     3.708,
+     2.297
+    ],
+    [
+     3.708,
+     4.478
+    ],
+    [
+     1.49,
+     4.478
+    ],
+    [
+     1.49,
+     2.297
+    ]
+   ]
+  },
+  {
+   "name": "KK",
+   "type": "Kitchen Kitchenette",
+   "polygon": [
+    [
+     13.17,
+     2.88
+    ],
+    [
+     13.17,
+     4.527
+    ],
+    [
+     10.06,
+     4.527
+    ],
+    [
+     10.06,
+     2.168
+    ],
+    [
+     12.549,
+     2.168
+    ],
+    [
+     12.549,
+     2.88
+    ]
+   ]
+  },
+  {
+   "name": "ET",
+   "type": "Entry Lobby",
+   "polygon": [
+    [
+     14.458,
+     2.88
+    ],
+    [
+     14.458,
+     4.527
+    ],
+    [
+     13.17,
+     4.527
+    ],
+    [
+     13.17,
+     2.88
+    ],
+    [
+     13.171,
+     3.938
+    ],
+    [
+     13.281,
+     3.938
+    ],
+    [
+     13.281,
+     2.88
+    ]
+   ]
+  },
+  {
+   "name": "OH",
+   "type": "LivingRoom",
+   "polygon": [
+    [
+     15.749,
+     7.476
+    ],
+    [
+     10.133,
+     7.476
+    ],
+    [
+     10.133,
+     4.992
+    ],
+    [
+     10.06,
+     4.992
+    ],
+    [
+     10.06,
+     4.527
+    ],
+    [
+     15.898,
+     4.527
+    ],
+    [
+     15.898,
+     7.272
+    ],
+    [
+     15.749,
+     7.272
+    ]
+   ]
+  },
+  {
+   "name": "MH",
+   "type": "Bedroom",
+   "polygon": [
+    [
+     14.311,
+     7.586
+    ],
+    [
+     14.311,
+     10.372
+    ],
+    [
+     10.133,
+     10.372
+    ],
+    [
+     10.133,
+     7.586
+    ]
+   ]
+  },
+  {
+   "name": "KH",
+   "type": "Bath",
+   "polygon": [
+    [
+     15.898,
+     2.168
+    ],
+    [
+     15.898,
+     4.427
+    ],
+    [
+     14.548,
+     4.427
+    ],
+    [
+     14.548,
+     2.168
+    ]
+   ]
+  },
+  {
+   "name": "TK",
+   "type": "DraughtLobby",
+   "polygon": [
+    [
+     14.458,
+     2.168
+    ],
+    [
+     14.458,
+     2.77
+    ],
+    [
+     12.659,
+     2.77
+    ],
+    [
+     12.659,
+     2.168
+    ]
+   ]
+  }
+ ],
+ "meta": {
+  "source_svg": "/mnt/user-data/uploads/model.svg",
+  "px_per_metre": 99.95,
+  "scale_agreement": 0.96,
+  "note": "ground truth derived from CubiCasa annotations; metres; y flipped"
+ }
+}
