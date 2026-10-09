@@ -75,7 +75,7 @@ def _point_to_segment(pt, a, b):
     return float(np.hypot(*(pt - (a + t * ab)))), t * np.sqrt(L2)
 
 
-def link_to_walls(ocr_items, plan, max_dist=1.0, max_rel_dev=0.4, min_confident=False):
+def link_to_walls(ocr_items, plan, max_dist=1.2, max_rel_dev=0.4, min_confident=False):
     """Attach each readable dimension to the wall it describes.
     A dimension line is drawn beside its wall, so we look for walls within max_dist
     of the text, then pick the one whose length best matches the number."""
