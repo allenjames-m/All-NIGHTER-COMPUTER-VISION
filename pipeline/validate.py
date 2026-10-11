@@ -2,7 +2,8 @@
 
 Checks (and fixes what can be fixed safely):
   1. zero-length walls                  -> removed
-  2. dangling wall ends (gaps in walls) -> extended along their own direction to meet the next wall
+  2. dangling wall ends (noise-sized gaps, <= 5 cm) -> extended along their own direction to meet the next wall;
+                                           larger gaps are reported, not changed (thick real walls do not meet at points)
   3. closed rooms                       -> rooms are re-derived from the walls; if the
                                            plan has no rooms, they are added (source: assumed)
   4. doors / windows                    -> must sit fully on their wall (position clamped),
@@ -47,7 +48,7 @@ def _faces(plan):
     return [f for f in polygonize(lines) if f.area > 0.5]
 
 
-def validate(plan, snap_tol=0.4, node_tol=0.05):
+def validate(plan, snap_tol=0.05, node_tol=0.05):
     plan = copy.deepcopy(plan)
     issues = []
 
@@ -69,7 +70,8 @@ def validate(plan, snap_tol=0.4, node_tol=0.05):
             if o is skip:
                 continue
             d, _ = _dist_pt_seg(pt, o["p1"], o["p2"])
-            if d < node_tol:
+            # real walls are thick: an end "touches" if it reaches the other wall's body
+            if d < node_tol + o.get("thickness", 0.0) / 2 + skip.get("thickness", 0.0) / 2:
                 return True
         return False
 
@@ -119,17 +121,30 @@ def validate(plan, snap_tol=0.4, node_tol=0.05):
                          for i, f in enumerate(faces)]
         log("fixed", f"{len(faces)} room(s) derived from the walls")
     else:
+        # thick-wall aware: how much of each room's outline is backed by wall material?
+        foot = unary_union([LineString([w["p1"], w["p2"]]).buffer(max(w.get("thickness", 0.0), 0.1) / 2 + 0.1)
+                            for w in plan["walls"] if _L(w) > 1e-6])
         for r in plan["rooms"]:
             rp = Polygon(r["polygon"])
             rp = rp if rp.is_valid else rp.buffer(0)
-            ok = any(rp.union(f).area > 0 and rp.intersection(f).area / rp.union(f).area > 0.5 for f in faces)
-            if not ok:
-                log("warning", f"room '{r.get('name', '?')}' is not enclosed by walls", r.get("name"))
+            if rp.is_empty or rp.geom_type != "Polygon":
+                continue
+            cov = rp.exterior.intersection(foot).length / max(rp.exterior.length, 1e-6)
+            if cov < 0.6:
+                log("warning", f"room '{r.get('name', '?')}' outline is only {cov:.0%} backed by walls", r.get("name"))
 
     # wall -> number of rooms beside it (0 = outside, 1 = exterior wall, 2 = shared)
+    room_polys = []
+    for r in plan.get("rooms", []):
+        rp = Polygon(r["polygon"])
+        rp = rp if rp.is_valid else rp.buffer(0)
+        if not rp.is_empty and rp.geom_type == "Polygon":
+            room_polys.append(rp)
+
     def n_sides(w):
-        mid = [(w["p1"][0] + w["p2"][0]) / 2, (w["p1"][1] + w["p2"][1]) / 2]
-        return sum(1 for f in faces if f.exterior.distance(Point(mid)) < 0.1)
+        mid = Point((w["p1"][0] + w["p2"][0]) / 2, (w["p1"][1] + w["p2"][1]) / 2)
+        reach = w.get("thickness", 0.0) / 2 + 0.12
+        return sum(1 for rp in room_polys if rp.exterior.distance(mid) < reach)
 
     walls = {w["id"]: w for w in plan["walls"]}
 
@@ -154,7 +169,7 @@ def validate(plan, snap_tol=0.4, node_tol=0.05):
                 if o["pos"] - half < b and o["pos"] + half > a:
                     log("warning", f"{label}: overlaps another opening", o["wall"])
             taken.setdefault(o["wall"], []).append((o["pos"] - half, o["pos"] + half))
-            sides = n_sides(w) if faces else None
+            sides = n_sides(w) if room_polys else None
             if sides is not None and kind == "windows" and sides >= 2:
                 log("warning", f"{label}: window on an interior wall", o["wall"])
             if sides is not None and kind == "doors" and sides == 0:
