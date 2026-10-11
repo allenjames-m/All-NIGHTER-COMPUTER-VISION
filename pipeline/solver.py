@@ -251,11 +251,13 @@ def calibrate_scale(plan, constraints, items=None, min_labels=3):
     return plan, f, items
 
 
-def solve_lines(plan, constraints, tol=0.05, max_rel_dev=0.4, reg=0.05, f_scale=0.05):
+def solve_lines(plan, constraints, tol=0.05, max_rel_dev=0.4, reg=0.05, f_scale=0.05, mark_tol=0.05):
     """Robust least squares on the positions of shared x- and y-lines.
     constraints: [{"wall": id, "length": metres}]. Readings further than max_rel_dev from the detected
-    length are ignored as OCR errors. Everything that moves is marked source = "inferred"."""
+    length are ignored as OCR errors. A wall that moved or changed length by more than mark_tol (5 cm) is
+    marked source = "inferred" (yellow in the viewer); smaller changes stay "detected"."""
     plan = copy.deepcopy(plan)
+    old_pts = [{"p1": list(w["p1"]), "p2": list(w["p2"])} for w in plan["walls"]]
     refs = _refs(plan)
     wall_idx = {w["id"]: k for k, w in enumerate(plan["walls"])}
     old_len = [_wall_len(w) for w in plan["walls"]]
@@ -303,7 +305,8 @@ def solve_lines(plan, constraints, tol=0.05, max_rel_dev=0.4, reg=0.05, f_scale=
     moved = []
     for k, w in enumerate(plan["walls"]):
         nl = _wall_len(w)
-        if abs(nl - old_len[k]) > 0.01:
+        shift = max(float(np.hypot(w[q][0] - old_pts[k][q][0], w[q][1] - old_pts[k][q][1])) for q in ("p1", "p2"))
+        if abs(nl - old_len[k]) > mark_tol or shift > mark_tol:   # length change OR position change
             w["source"] = "inferred"
             moved.append(w["id"])
         scale = nl / old_len[k] if old_len[k] > 1e-6 else 1.0
