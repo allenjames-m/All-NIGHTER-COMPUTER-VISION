@@ -3,7 +3,8 @@
 Usage (from the repo root):
     python pipeline/build_3d.py                      # uses data/sample_plan.json
     python pipeline/build_3d.py data/my_plan.json    # any plan JSON
-Output: viewer/model.glb   (open viewer/index.html via a local server)
+Output: viewer/model.glb (green/yellow/red) and viewer/model_realistic.glb (neutral materials);
+        open viewer/index.html via a local server and use the toggle
 
 JSON format (metres everywhere):
   walls:   {id, p1:[x,y], p2:[x,y], source}
@@ -37,6 +38,10 @@ COLORS = {
 }
 FLOOR_COLOR = COLORS["assumed"]  # floor is not read from the plan, so it is an assumption
 
+# "realistic" look: neutral materials, no provenance colours
+REAL_WALL = [232, 226, 214, 255]
+REAL_FLOOR = [176, 142, 104, 255]
+
 
 def color_for(source):
     return COLORS.get(source, COLORS["assumed"])
@@ -57,7 +62,7 @@ def wall_box(x1, y1, x2, y2, z0, z1, color):
     return box
 
 
-def build_wall(wall, openings, wall_h):
+def build_wall(wall, openings, wall_h, mode="confidence"):
     """Wall split around its doors/windows. openings = list of dicts with
     kind ('door'|'window'), pos, width, sill, height."""
     x1, y1 = wall["p1"]
@@ -67,7 +72,7 @@ def build_wall(wall, openings, wall_h):
         return []
     ux, uy = (x2 - x1) / L, (y2 - y1) / L
     p = lambda d: (x1 + ux * d, y1 + uy * d)
-    color = color_for(wall.get("source"))
+    color = color_for(wall.get("source")) if mode == "confidence" else REAL_WALL
 
     # clamp each opening inside the wall, sort along the wall
     spans = []
@@ -95,8 +100,9 @@ def build_wall(wall, openings, wall_h):
     return [m for m in pieces if m is not None]
 
 
-def build_floor(polygon_xy, thickness=0.1):
+def build_floor(polygon_xy, thickness=0.1, mode="confidence"):
     """Floor slab for a room polygon (works for non-rectangular rooms)."""
+    floor_color = FLOOR_COLOR if mode == "confidence" else REAL_FLOOR
     poly = Polygon(polygon_xy)
     if not poly.is_valid:
         poly = poly.buffer(0)
@@ -108,7 +114,7 @@ def build_floor(polygon_xy, thickness=0.1):
         minx, miny, maxx, maxy = poly.bounds
         box = trimesh.creation.box(extents=[maxx - minx, maxy - miny, thickness])
         box.apply_translation([(minx + maxx) / 2, (miny + maxy) / 2, -thickness / 2])
-        box.visual.face_colors = FLOOR_COLOR
+        box.visual.face_colors = floor_color
         return box
     meshes = []
     for t in tris:
@@ -119,7 +125,7 @@ def build_floor(polygon_xy, thickness=0.1):
             m.invert()
         meshes.append(m)
     floor = trimesh.util.concatenate(meshes)
-    floor.visual.face_colors = FLOOR_COLOR
+    floor.visual.face_colors = floor_color
     return floor
 
 
@@ -128,7 +134,7 @@ def load_plan(path):
         return json.load(f)
 
 
-def build_scene(plan):
+def build_scene(plan, mode="confidence"):
     wall_h = plan.get("wall_height", DEFAULT_WALL_H)
     walls = {w["id"]: w for w in plan.get("walls", [])}
 
@@ -154,9 +160,9 @@ def build_scene(plan):
 
     meshes = []
     for wid, wall in walls.items():
-        meshes += build_wall(wall, by_wall[wid], wall_h)
+        meshes += build_wall(wall, by_wall[wid], wall_h, mode)
     for room in plan.get("rooms", []):
-        meshes.append(build_floor(room["polygon"]))
+        meshes.append(build_floor(room["polygon"], mode=mode))
 
     scene = trimesh.Scene(meshes)
     # glTF is Y-up; our plan is Z-up, so rotate so the room stands upright
@@ -168,9 +174,10 @@ def main():
     plan_path = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "data" / "sample_plan.json"
     plan = load_plan(plan_path)
     scene = build_scene(plan)
-    out = ROOT / "viewer" / "model.glb"
+    out = ROOT / "viewer" / "model.glb"                 # provenance colours (default)
     out.parent.mkdir(exist_ok=True)
     scene.export(out)
+    build_scene(plan, "realistic").export(ROOT / "viewer" / "model_realistic.glb")
     print(f"Built {plan_path.name}: {len(plan.get('walls', []))} walls, "
           f"{len(plan.get('doors', []))} doors, {len(plan.get('windows', []))} windows")
     print(f"Wrote {out}")
