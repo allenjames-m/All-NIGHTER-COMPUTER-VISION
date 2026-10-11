@@ -29,7 +29,7 @@ broken = {"walls": [
     "doors": [{"wall": "a", "pos": 5.9, "width": 0.9}],  # sticks out of the wall
     "windows": [{"wall": "m", "pos": 2.0, "width": 1.0}],  # on an interior wall
     "rooms": []}
-fixed, issues = validate(broken)
+fixed, issues = validate(broken, snap_tol=0.4)
 fx, wr = kinds(issues, "fixed"), kinds(issues, "warning")
 assert any("zero-length" in s for s in fx), issues
 assert any("gap" in s for s in fx), issues
@@ -46,5 +46,5 @@ _, issues = validate({"walls": [{"id": "a", "p1": [0, 0], "p2": [5, 0]}, {"id": 
 assert kinds(issues, "error"), issues
 
 print("Validation tests passed")
-for i in validate(broken)[1]:
+for i in validate(broken, snap_tol=0.4)[1]:
     print(f"  [{i['level']:7s}] {i['what']}")
