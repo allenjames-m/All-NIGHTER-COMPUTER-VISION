@@ -61,6 +61,7 @@ def run(detected, ocr_items=None, gt=None, out_dir=None, glb_path=None, verbose=
     if glb_path:
         glb_path.parent.mkdir(exist_ok=True)
         build_scene(validated).export(glb_path)
+        build_scene(validated, "realistic").export(glb_path.with_name("model_realistic.glb"))
         log(f"3D model written: {glb_path}")
 
     scores = None
