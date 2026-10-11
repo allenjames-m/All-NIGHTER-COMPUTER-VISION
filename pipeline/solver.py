@@ -158,6 +158,163 @@ def solve_dimensions(plan, constraints, node_tol=0.15, max_rel_dev=0.4,
     return plan, report
 
 
+# =====================================================================================
+# v2: "axis-line" solver  (works on real plans: thick walls, pieces that do not share endpoints)
+#
+# Real plans are mostly made of straight lines at x = const or y = const. Instead of merging wall
+# endpoints (which breaks when walls are thick), we group ALL coordinates (wall ends + room corners)
+# into shared lines per axis, then solve for the position of those lines. A corrected line moves
+# everything attached to it, so one dimension fixes walls AND room corners.
+# =====================================================================================
+def _refs(plan):
+    """references to every [x, y] point in the plan: wall ends and room corners"""
+    refs = []
+    for w in plan["walls"]:
+        refs += [(w, "p1"), (w, "p2")]
+    for r in plan.get("rooms", []):
+        refs += [(r["polygon"], i) for i in range(len(r["polygon"]))]
+    return refs
+
+
+def _cluster(vals, tol):
+    """1-D single-linkage clustering: values closer than tol share a line"""
+    vals = np.asarray(vals, float)
+    lab = np.zeros(len(vals), int)
+    if len(vals) == 0:
+        return lab
+    order = np.argsort(vals)
+    cur = 0
+    for a, b in zip(order[:-1], order[1:]):
+        if vals[b] - vals[a] > tol:
+            cur += 1
+        lab[b] = cur
+    return lab
+
+
+def snap_lines(plan, tol=0.02, tilt_deg=3.0):
+    """Conservative clean-up: straighten almost-axis-aligned walls and merge coordinates that differ
+    by less than `tol` (2 cm). Leaves already-clean plans untouched."""
+    plan = copy.deepcopy(plan)
+    for w in plan["walls"]:
+        dx, dy = w["p2"][0] - w["p1"][0], w["p2"][1] - w["p1"][1]
+        ang = np.degrees(np.arctan2(abs(dy), abs(dx)))
+        if 1e-6 < ang < tilt_deg:                      # nearly horizontal
+            y = (w["p1"][1] + w["p2"][1]) / 2
+            w["p1"][1] = w["p2"][1] = y
+        elif 90 - tilt_deg < ang < 90 - 1e-6:          # nearly vertical
+            x = (w["p1"][0] + w["p2"][0]) / 2
+            w["p1"][0] = w["p2"][0] = x
+    refs = _refs(plan)
+    for axis in (0, 1):
+        vals = [c[k][axis] for c, k in refs]
+        lab = _cluster(vals, tol)
+        for l in np.unique(lab):
+            idx = np.where(lab == l)[0]
+            m = float(np.mean([vals[i] for i in idx]))
+            for i in idx:
+                c, k = refs[i]
+                c[k] = list(c[k])
+                c[k][axis] = m
+    return plan
+
+
+def calibrate_scale(plan, constraints, items=None, min_labels=3):
+    """If the plan was converted to metres with the wrong pixels-per-metre, every wall is too long or too
+    short by the same factor. The written dimensions reveal it: scale = median(written / measured).
+    Returns (plan, factor, items) with plan (and OCR item positions) rescaled."""
+    walls = {w["id"]: w for w in plan["walls"]}
+    ratios = []
+    for c in constraints:
+        w = walls.get(c["wall"])
+        if w is not None and _wall_len(w) > 0.3:
+            ratios.append(c["length"] / _wall_len(w))
+    if len(ratios) < min_labels:
+        return plan, 1.0, items
+    f = float(np.median(ratios))
+    agree = float(np.mean(np.abs(np.array(ratios) / f - 1) < 0.04))   # share of labels that agree on this factor
+    if abs(f - 1) < 0.03 or not (0.5 < f < 2.0) or agree < 0.6:       # tiny or inconsistent -> just noise, do nothing
+        return plan, 1.0, items
+    plan = copy.deepcopy(plan)
+    for w in plan["walls"]:
+        w["p1"] = [w["p1"][0] * f, w["p1"][1] * f]
+        w["p2"] = [w["p2"][0] * f, w["p2"][1] * f]
+        if "thickness" in w:
+            w["thickness"] *= f
+    for r in plan.get("rooms", []):
+        r["polygon"] = [[x * f, y * f] for x, y in r["polygon"]]
+    for key in ("doors", "windows"):
+        for o in plan.get(key, []):
+            o["pos"] *= f
+            o["width"] = o.get("width", 0.9) * f
+    if items is not None:
+        items = [{**it, "center": [it["center"][0] * f, it["center"][1] * f]} for it in items]
+    return plan, f, items
+
+
+def solve_lines(plan, constraints, tol=0.05, max_rel_dev=0.4, reg=0.05, f_scale=0.05):
+    """Robust least squares on the positions of shared x- and y-lines.
+    constraints: [{"wall": id, "length": metres}]. Readings further than max_rel_dev from the detected
+    length are ignored as OCR errors. Everything that moves is marked source = "inferred"."""
+    plan = copy.deepcopy(plan)
+    refs = _refs(plan)
+    wall_idx = {w["id"]: k for k, w in enumerate(plan["walls"])}
+    old_len = [_wall_len(w) for w in plan["walls"]]
+    n = len(refs)
+    vals = [np.array([c[k][0] for c, k in refs]), np.array([c[k][1] for c, k in refs])]
+    lab = [_cluster(vals[0], tol), _cluster(vals[1], tol)]
+    pos0 = [np.array([vals[a][lab[a] == l].mean() for l in range(lab[a].max() + 1)]) for a in (0, 1)]
+
+    cons, rejected = [[], []], []
+    for c in constraints:
+        k = wall_idx.get(c["wall"])
+        if k is None:
+            rejected.append({**c, "reason": "unknown wall"})
+            continue
+        w = plan["walls"][k]
+        dx, dy = w["p2"][0] - w["p1"][0], w["p2"][1] - w["p1"][1]
+        ang = np.degrees(np.arctan2(abs(dy), abs(dx)))
+        axis = 0 if ang < 8 else 1 if ang > 82 else None
+        if axis is None:
+            rejected.append({**c, "reason": "wall is diagonal"})
+            continue
+        dev = abs(c["length"] - old_len[k]) / max(old_len[k], 1e-6)
+        if dev > max_rel_dev:
+            rejected.append({**c, "reason": f"{dev:.0%} away from detected length (likely OCR error)"})
+            continue
+        a, b = lab[axis][2 * k], lab[axis][2 * k + 1]
+        if a == b:
+            continue
+        sign = 1.0 if (dx if axis == 0 else dy) > 0 else -1.0
+        cons[axis].append((a, b, sign, float(c["length"])))
+
+    new_pos = []
+    for a in (0, 1):
+        def res(p, a=a):
+            r = [s * (p[j] - p[i]) - L for i, j, s, L in cons[a]]
+            r += list(reg * (p - pos0[a]))
+            return np.array(r)
+        sol = least_squares(res, pos0[a], loss="soft_l1", f_scale=f_scale)
+        new_pos.append(sol.x)
+    for a in (0, 1):
+        for i, (c, k) in enumerate(refs):
+            c[k] = list(c[k])
+            c[k][a] = float(new_pos[a][lab[a][i]])
+
+    moved = []
+    for k, w in enumerate(plan["walls"]):
+        nl = _wall_len(w)
+        if abs(nl - old_len[k]) > 0.01:
+            w["source"] = "inferred"
+            moved.append(w["id"])
+        scale = nl / old_len[k] if old_len[k] > 1e-6 else 1.0
+        for key in ("doors", "windows"):
+            for o in plan.get(key, []):
+                if o["wall"] == w["id"]:
+                    o["pos"] *= scale
+    report = {"used": sum(len(c) for c in cons), "rejected": rejected, "moved_walls": moved}
+    return plan, report
+
+
 def main():
     if len(sys.argv) != 4:
         print(__doc__)
