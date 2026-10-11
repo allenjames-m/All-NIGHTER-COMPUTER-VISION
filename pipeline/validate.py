@@ -104,7 +104,8 @@ def validate(plan, snap_tol=0.05, node_tol=0.05):
             hit = extend_to_wall(w, key)
             if hit and abs(hit[0]) > 1e-3:
                 w[key] = [float(hit[1][0]), float(hit[1][1])]
-                w["source"] = "inferred"
+                if abs(hit[0]) > 0.03:                    # only visible changes turn the wall yellow
+                    w["source"] = "inferred"
                 log("fixed", f"gap of {abs(hit[0])*100:.0f} cm closed (end {key} extended to wall {hit[2]})", w["id"])
     for w in plan["walls"]:                               # whatever is still loose gets a warning
         for key in ("p1", "p2"):
