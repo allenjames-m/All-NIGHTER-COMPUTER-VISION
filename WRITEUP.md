@@ -65,5 +65,6 @@ Validation does not change accuracy; it is a consistency and honesty layer.
 * **[TODO before submission]** add the real-parser table: `python eval/ablation.py data --pred-dir preds`.
 
 ## 6. Honesty (provenance)
-Every wall, door, window and room carries `source`. The viewer colours green / yellow / red. In the simulated runs,
-the solver marks only the walls it actually moved (more than 1 cm) as inferred.
+Every wall, door, window and room carries `source`. The viewer colours green / yellow / red. The solver marks a wall
+as inferred only if it moved or changed length by more than 5 cm; smaller adjustments stay green. Dimension labels
+fix sizes, not absolute position, so on a single plan layout IoU can dip slightly while dimension error falls.
